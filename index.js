@@ -21,7 +21,7 @@ const dbConfig = {
 };
 
 // API endpoint to fetch data
-app.get('/api/data', async (req, res) => {
+app.get('/api/products', async (req, res) => {
   try {
     await sql.connect(dbConfig);
     const query = 'SELECT * FROM Item_master';
