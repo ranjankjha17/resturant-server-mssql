@@ -60,4 +60,9 @@ app.post('/api/order', async (req, res) => {
     await sql.close();
   }
 });
+
+const port=5000
+app.listen(port,()=>{
+  console.log(`server is running on ${port}`)
+})
 //code,Name,rate,Ac_rate,dept_No,dept_Name
