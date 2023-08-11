@@ -37,24 +37,26 @@ app.get('/api/allProducts', async (req, res) => {
   }
 });
 
-// API endpoint for handling POST requests
+// POST requests for order
 app.post('/api/order', async (req, res) => {
   try {
-    const newOrder = { ...req.body };
+    const {itemName,rate,qty,tableNo,itemCode} = req.body;
     await sql.connect(dbConfig);
     
     const query = `
-      INSERT INTO Table_Day (name, rate, qty)
-      VALUES (@value1, @value2, @value3)
+      INSERT INTO Table_Day (ItemName, Rate, Qty,TableNo,ItemCode)
+      VALUES (@itemName, @rate, @qty,@tableNo,@itemCode)
     `;
     
     const request = new sql.Request();
-    request.addParameter('value1', sql.NVarChar, newOrder.itemName); 
-    request.addParameter('value2', sql.Int, newOrder.rate); 
-    request.addParameter('value3', sql.Float, newOrder.qty); 
+    request.input('itemName', sql.VarChar, itemName); 
+    request.input('rate', sql.Float, rate); 
+    request.input('qty', sql.Float, qty); 
+    request.input('tableNo', sql.Int, tableNo); 
+    request.input('itemCode', sql.Int, itemCode); 
     await request.query(query);
     
-    res.status(201).json({ message: 'Data added successfully.' });
+    res.status(201).json({ message: 'Order added successfully.' });
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ error: 'An error occurred while adding data.' });
@@ -64,15 +66,12 @@ app.post('/api/order', async (req, res) => {
 });
 
 
-// API endpoint for user registration
+//  user registration
 app.post('/api/register', async (req, res) => {
   try {
     const {username,email, password } = req.body;
-   // let username="ranjan"
     console.log(email)
     await sql.connect(dbConfig);
-    
-    // Check if user with the given email already exists
     const emailCheckQuery = 'SELECT * FROM Users WHERE Email = @email';
     const emailCheckRequest = new sql.Request();
     emailCheckRequest.input('email', sql.NVarChar, email);
@@ -82,7 +81,6 @@ app.post('/api/register', async (req, res) => {
       return res.status(400).json({ error: 'Email already registered.' });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
-    // Insert new user into the database
     const insertQuery = `
       INSERT INTO Users (Username, Email, Password)
       VALUES (@username, @email, @hashedPassword)
