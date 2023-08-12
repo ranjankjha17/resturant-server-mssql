@@ -1,27 +1,23 @@
-const Connection = require('tedious').Connection;
-const config = {
-  server: 'SQL5106.site4now.net', 
-  authentication: {
-    type: 'default',
-    options: {
-      userName: 'db_a9d5a9_resturant_admin', 
-      password: 'Ranjan@1990', 
-    },
-  },
+const sql = require('mssql');
+
+
+const dbConfig = {
+  user: 'db_a9d5a9_resturant_admin',
+  password: 'Ranjan@1990',
+  server: 'SQL5106.site4now.net',
+  database: 'db_a9d5a9_resturant',
   options: {
-    database: 'db_a9d5a9_resturant', 
-    encrypt: true,
-    trustServerCertificate: true, 
-    connectionTimeout: 15000, 
-    requestTimeout: 30000, 
-  },
-  
+    encrypt: true, 
+    trustServerCertificate: true 
+  }
 };
 
-const pool=new Connection(config)
+async function connect() {
+  await sql.connect(dbConfig);
+}
 
-// pool.on('error', (err) => {
-//   console.error('Database connection error:', err.message);
-// });
+async function close() {
+  await sql.close();
+}
 
-module.exports = pool;
+module.exports = { connect, close };
