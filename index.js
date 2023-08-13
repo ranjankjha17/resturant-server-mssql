@@ -8,12 +8,16 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const userRoutes=require('./userRoutes')
 const productRoutes=require('./productRoutes')
+const dateRoutes=require('./dateRoutes')
+const tableTypeRoutes=require('./tableTypeRoutes')
 
 app.use(cors())
 app.use(express.json());
 
 app.use('/',userRoutes)
 app.use('/',productRoutes)
+app.use('/',dateRoutes)
+app.use('/',tableTypeRoutes)
 
 const port=5000
 app.listen(port,()=>{
