@@ -11,7 +11,10 @@ const productRoutes=require('./productRoutes')
 const dateRoutes=require('./dateRoutes')
 const tableTypeRoutes=require('./tableTypeRoutes')
 
-app.use(cors())
+app.use(cors({
+  origin: 'http://localhost:19006'
+}));
+
 app.use(express.json());
 
 app.use('/',userRoutes)
