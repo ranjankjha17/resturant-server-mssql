@@ -65,5 +65,20 @@ router.post('/api/register', async (req, res) => {
   });
 
 
+  router.get('/api/user', async (req, res) => {
+    try {
+      await database.connect();
+      const query = 'SELECT UserID FROM UserLogin';
+      const result = await sql.query(query);
+      res.json(result.recordset);
+    } catch (error) {
+      console.error('Error:', error);
+      res.status(500).send('An error occurred while fetching userID.');
+    } finally {
+      await database.close();
+    }
+  });
+
+
 
 module.exports = router;
