@@ -95,11 +95,12 @@ router.post('/api/order', async (req, res) => {
     const newKOTNumber = lastKOTNumber + 1;
     
     for (const order of orders) {
-      const { itemName, rate, qty, tableNo, itemCode } = order;
-      const paramNamePrefix = `${itemCode}_${tableNo}`; // Create a unique prefix
+      const { itemName, rate, qty, tableNo, itemCode,userID,currentTableType,amount,bookingDate } = order;
+      const Kot_Type='KOT'
+      const paramNamePrefix = `${itemCode}_${tableNo}`;
       const query = `
-        INSERT INTO Table_Day (ItemName, Rate, Qty, TableNo, ItemCode, KOT_No)
-        VALUES (@itemName_${paramNamePrefix}, @rate_${paramNamePrefix}, @qty_${paramNamePrefix}, @tableNo_${paramNamePrefix}, @itemCode_${paramNamePrefix}, @kotNumber_${paramNamePrefix})
+        INSERT INTO Table_Day (ItemName, Rate, Qty, TableNo, ItemCode, KOT_No,Amount,Login,TableType,KOT_Type,BDate)
+        VALUES (@itemName_${paramNamePrefix}, @rate_${paramNamePrefix}, @qty_${paramNamePrefix}, @tableNo_${paramNamePrefix}, @itemCode_${paramNamePrefix}, @kotNumber_${paramNamePrefix},@amount_${paramNamePrefix},@userID_${paramNamePrefix},@currentTableType_${paramNamePrefix},@Kot_Type_${paramNamePrefix},@bookingDate_${paramNamePrefix})
       `;
       request.input(`itemName_${paramNamePrefix}`, sql.VarChar, itemName);
       request.input(`rate_${paramNamePrefix}`, sql.Float, rate);
@@ -107,6 +108,11 @@ router.post('/api/order', async (req, res) => {
       request.input(`tableNo_${paramNamePrefix}`, sql.Int, tableNo);
       request.input(`itemCode_${paramNamePrefix}`, sql.Int, itemCode);
       request.input(`kotNumber_${paramNamePrefix}`, sql.Int, newKOTNumber);
+     request.input(`bookingDate_${paramNamePrefix}`,sql.DateTime,bookingDate);
+     request.input(`userID_${paramNamePrefix}`,sql.VarChar,userID);
+     request.input(`currentTableType_${paramNamePrefix}`,sql.VarChar,currentTableType);
+      request.input(`amount_${paramNamePrefix}`,sql.Float,amount);
+     request.input(`Kot_Type_${paramNamePrefix}`,sql.VarChar,Kot_Type);
       await request.query(query);
     }
     
