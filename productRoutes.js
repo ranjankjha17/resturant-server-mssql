@@ -72,31 +72,31 @@ router.get('/api/allProducts', async (req, res) => {
 router.post('/api/order', async (req, res) => {
   const orders = req.body;
   console.log(orders);
-  
+
   if (!orders || orders.length === 0) {
     return res.status(400).json({ message: 'No order data provided' });
   }
-  
+
   await database.connect();
-  
+
   try {
     const transaction = new sql.Transaction();
     await transaction.begin();
     const request = new sql.Request(transaction);
-    
+
     const lastKOTNumberQuery = `
       SELECT TOP 1 KOT_No
       FROM Table_Day
       ORDER BY KOT_No DESC
     `;
-    
+
     const lastKOTNumberResult = await request.query(lastKOTNumberQuery);
     const lastKOTNumber = lastKOTNumberResult.recordset[0].KOT_No || 0;
     const newKOTNumber = lastKOTNumber + 1;
-    
+
     for (const order of orders) {
-      const { itemName, rate, qty, tableNo, itemCode,userID,currentTableType,amount,bookingDate } = order;
-      const Kot_Type='KOT'
+      const { itemName, rate, qty, tableNo, itemCode, userID, currentTableType, amount, bookingDate } = order;
+      const Kot_Type = 'KOT'
       const paramNamePrefix = `${itemCode}_${tableNo}`;
       const query = `
         INSERT INTO Table_Day (ItemName, Rate, Qty, TableNo, ItemCode, KOT_No,Amount,Login,TableType,KOT_Type,BDate)
@@ -108,14 +108,14 @@ router.post('/api/order', async (req, res) => {
       request.input(`tableNo_${paramNamePrefix}`, sql.Int, tableNo);
       request.input(`itemCode_${paramNamePrefix}`, sql.Int, itemCode);
       request.input(`kotNumber_${paramNamePrefix}`, sql.Int, newKOTNumber);
-     request.input(`bookingDate_${paramNamePrefix}`,sql.DateTime,bookingDate);
-     request.input(`userID_${paramNamePrefix}`,sql.VarChar,userID);
-     request.input(`currentTableType_${paramNamePrefix}`,sql.VarChar,currentTableType);
-      request.input(`amount_${paramNamePrefix}`,sql.Float,amount);
-     request.input(`Kot_Type_${paramNamePrefix}`,sql.VarChar,Kot_Type);
+      request.input(`bookingDate_${paramNamePrefix}`, sql.DateTime, bookingDate);
+      request.input(`userID_${paramNamePrefix}`, sql.VarChar, userID);
+      request.input(`currentTableType_${paramNamePrefix}`, sql.VarChar, currentTableType);
+      request.input(`amount_${paramNamePrefix}`, sql.Float, amount);
+      request.input(`Kot_Type_${paramNamePrefix}`, sql.VarChar, Kot_Type);
       await request.query(query);
     }
-    
+
     await transaction.commit();
     return res.status(201).json({ message: 'Data inserted successfully' });
   } catch (error) {
