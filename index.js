@@ -10,6 +10,7 @@ const userRoutes=require('./userRoutes')
 const productRoutes=require('./productRoutes')
 const dateRoutes=require('./dateRoutes')
 const tableTypeRoutes=require('./tableTypeRoutes')
+const viewRoutes=require('./viewRoutes')
 
 app.use(cors({
   origin: 'http://localhost:19006'
@@ -21,6 +22,7 @@ app.use('/',userRoutes)
 app.use('/',productRoutes)
 app.use('/',dateRoutes)
 app.use('/',tableTypeRoutes)
+app.use('/',viewRoutes)
 
 const port=5000
 app.listen(port,()=>{
