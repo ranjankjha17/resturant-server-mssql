@@ -96,12 +96,12 @@ router.post('/api/order', async (req, res) => {
 
     for (const order of orders) {
       console.log(order)
-      const { itemName, rate, qty, tableNo, itemCode, userID, currentTableType, amount, bookingDate,bookTime } = order;
+      const { itemName, rate, qty, tableNo, itemCode, userID, currentTableType, amount, bookingDate,bookingTime } = order;
       const Kot_Type = 'KOT'
       const paramNamePrefix = `${itemCode}_${tableNo}`;
       const query = `
         INSERT INTO Table_Day (ItemName, Rate, Qty, TableNo, ItemCode, KOT_No,Amount,Login,TableType,KOT_Type,BDate,BTime)
-        VALUES (@itemName_${paramNamePrefix}, @rate_${paramNamePrefix}, @qty_${paramNamePrefix}, @tableNo_${paramNamePrefix}, @itemCode_${paramNamePrefix}, @kotNumber_${paramNamePrefix},@amount_${paramNamePrefix},@userID_${paramNamePrefix},@currentTableType_${paramNamePrefix},@Kot_Type_${paramNamePrefix},@bookingDate_${paramNamePrefix},@bookTime_${paramNamePrefix})
+        VALUES (@itemName_${paramNamePrefix}, @rate_${paramNamePrefix}, @qty_${paramNamePrefix}, @tableNo_${paramNamePrefix}, @itemCode_${paramNamePrefix}, @kotNumber_${paramNamePrefix},@amount_${paramNamePrefix},@userID_${paramNamePrefix},@currentTableType_${paramNamePrefix},@Kot_Type_${paramNamePrefix},@bookingDate_${paramNamePrefix},@bookingTime_${paramNamePrefix})
       `;
       request.input(`itemName_${paramNamePrefix}`, sql.VarChar, itemName);
       request.input(`rate_${paramNamePrefix}`, sql.Float, rate);
@@ -110,7 +110,7 @@ router.post('/api/order', async (req, res) => {
       request.input(`itemCode_${paramNamePrefix}`, sql.Int, itemCode);
       request.input(`kotNumber_${paramNamePrefix}`, sql.Int, newKOTNumber);
       request.input(`bookingDate_${paramNamePrefix}`, sql.DateTime, bookingDate);
-      request.input(`bookingTime_${paramNamePrefix}`,sql.VarChar,bookTime);
+      request.input(`bookingTime_${paramNamePrefix}`,sql.VarChar,bookingTime);
       request.input(`userID_${paramNamePrefix}`, sql.VarChar, userID);
       request.input(`currentTableType_${paramNamePrefix}`, sql.VarChar, currentTableType);
       request.input(`amount_${paramNamePrefix}`, sql.Float, amount);
