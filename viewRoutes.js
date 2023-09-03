@@ -9,7 +9,7 @@ const sql = require('mssql');
 router.get('/api/viewKOT', async (req, res) => {
   try {
     await database.connect();
-    const query=`SELECT DISTINCT ItemName,Qty,Rate,Amount,TableNo,BDate,BTime,Company,Add1
+    const query=`SELECT DISTINCT ItemName,Qty,Rate,Amount,TableNo,BDate,BTime,Company,Add1,KOT_No
     FROM View_KOT
     WHERE KOT_No = (
         SELECT TOP 1 KOT_No
